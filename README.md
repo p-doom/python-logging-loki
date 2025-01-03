@@ -1,4 +1,4 @@
-python-logging-loki
+python-logging-loki (with structured metadata support)
 ===================
 
 [![PyPI version](https://img.shields.io/pypi/v/python-logging-loki.svg)](https://pypi.org/project/python-logging-loki/)
@@ -6,7 +6,8 @@ python-logging-loki
 [![License](https://img.shields.io/pypi/l/python-logging-loki.svg)](https://opensource.org/licenses/MIT)
 [![Build Status](https://travis-ci.org/GreyZmeem/python-logging-loki.svg?branch=master)](https://travis-ci.org/GreyZmeem/python-logging-loki)
 
-Python logging handler for Loki.  
+A fork of the python logging handler for Loki, supporting structured metadata.
+
 https://grafana.com/loki
 
 Installation
@@ -44,7 +45,16 @@ Example above will send `Something happened` message along with these labels:
 - Logger's name as `logger` 
 - Labels from `tags` item of `extra` dict
 
-The given example is blocking (i.e. each call will wait for the message to be sent).  
+To log structured metadata, simply add a `metadata` field to `extra`:
+
+```python
+logger.info(
+    f'Epoch [{epoch+1}/{epochs}], Loss: {loss:.4f}', 
+    extra={"tags": {"experiment": "example"}, "metadata": {"epoch": f"{epoch}", "loss": f"{loss:.4f}"}},
+    )
+```
+
+The given examples are blocking (i.e. each call will wait for the message to be sent).  
 But you can use the built-in `QueueHandler` and` QueueListener` to send messages in a separate thread.  
 
 ```python
